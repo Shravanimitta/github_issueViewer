@@ -1,0 +1,41 @@
+<div>
+	<ul class="details-wrapper">
+		<li>
+			<a href="{{issueDetails.usergithubLink}}">
+				<img class="avatar-image-details" src="{{issueDetails.userAvatar}}" alt="Image">
+				<strong class="user-name">{{issueDetails.userName}}</strong>
+			</a>
+		</li>
+		<li class="title-details">{{issueDetails.title}}</li>
+		<li class="status-wrapper-details">Status: 
+			<span ng-class="{'status-open-font': issueDetails.state === 'open' , 'status-closed-font': issueDetails.state === 'closed'}">
+				<strong>{{issueDetails.state}}</strong>
+			</span>
+		</li>
+		<li class="label-wrapper-details"><div class="label-wrapper">
+	          <span ng-repeat="label in issueDetails.labels">
+	              <span class="label-button label-static" style="background-color: #{{label.color}}">{{label.name}}</span>
+	          </span>
+        	</div>
+        </li>
+		<li class="summary" ng-bind-html="issueDetails.summary | unsafe"></li>			
+	</ul>
+	<ul class="comments-wrapper" ng-repeat="comment in issueDetails.comments">
+		<li>
+			<div class="comments-image-wrapper">
+				<a href="{{comment.usergithublink}}">
+					<img class="comments-avatar" src="{{comment.userAvatar}}" alt="user image">
+					<span class="comments-user-name">{{comment.userName}}</span>
+				</a>
+			</div>	
+			<div class="comments-content-wrapper">
+				<div class="arrow-left"></div>
+				<p>{{comment.date | date:"MM/dd/yyyy 'at' h:mma"}}</p>
+				<p ng-bind-html="comment.summary"></p>
+			</div>
+		</li>
+	</ul>
+	<div class="noResults-wrapper" ng-show="showError">
+	    <p>{errorMessage}</p>
+	</div>
+</div>

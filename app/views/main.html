@@ -1,0 +1,48 @@
+  <div class="top-header">
+    <div class="search-wrapper">
+      <input class="search-box" type="text" ng-model="searchText" placeholder="Search" type="search" ng-change="checkText()" class="form-control" ng-enter="search()"/>
+      <span class="glyphicon glyphicon-remove remove" ng-show="searchTextTyped" ng-click="clearSearch();"></span>
+      <span class="glyphicon glyphicon-search search-magnify" ng-click="search()"></span>
+    </div><div class="filter-wrapper">
+      <button class="btn" ng-click="filterState('closed')" ng-class="{'filter-active': isFilterActive('closed')}">Closed</button>
+      <button class="btn" ng-click="filterState('open')" ng-class="{'filter-active': isFilterActive('open')}">Open</button>
+      <button class="btn" ng-click="filterState('all')" ng-class="{'filter-active': isFilterActive('all')}">All</button>
+    </div>
+    <div class="labels-header"></div>
+  </div> 
+  <ul ng-repeat="issue in issues | startFrom:currentPage*pageSize | limitTo:pageSize" class="list-wrapper outer-wrapper">
+    <li class="issue-wrapper">
+
+      <div class="list-wrapper image-wrapper">
+        <a href="{{issue.userGithubLink}}">
+          <img class="avatar-image" src="{{issue.userAvatar}}" alt="Image">
+          <p class="user-name">
+            <strong>{{issue.userName}}</strong>
+          </p>
+        </a>  
+      </div><div class="issue-content-wrapper">
+        <a href="#/details?number={{issue.number}}">
+          <p class="issueHeader"><span class="issueNumber">#{{issue.number}} - </span><span ng-bind-html="issue.name"></span></p>
+        </a>
+        <div class="label-wrapper">
+          <span ng-repeat="label in issue.labels">
+              <span class="label-button" style="background-color: #{{label.color}}" ng-click="filterLabels($event)">{{label.name}}</span>
+          </span>
+        </div>
+        <p class="status-wrapper" ng-class="{'status-open-background': issue.state === 'open' , 'status-closed-background': issue.state === 'closed'}">{{issue.state}}</p>
+        <p class="issue-body" ng-bind-html="issue.body"></p>
+      </div> 
+    </li>
+  </ul>
+  <div class="pagination-wrapper" ng-hide="showError">
+    <button class="btn btn-primary" ng-click="paginate('prev')" ng-disabled="current_page === 1">
+      Previous
+    </button>
+      <span class="page-number">{{current_page}} of {{total_pages}}</span>
+    <button class="btn btn-primary" ng-click="paginate('next')" ng-disabled = "current_page == total_pages">
+      Next
+    </button>
+  </div>
+  <div class="noResults-wrapper" ng-show="showError">
+    <p>{errorMessage}</p>
+  </div>
